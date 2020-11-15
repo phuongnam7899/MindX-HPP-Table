@@ -16,8 +16,8 @@ interface Props {
 export const HelperPopover = (props: PropsWithChildren<Props>) => {
   const { menuOptions, children, style } = props;
   const classes = useStyles();
-  const contentRef = useRef(null);
-  const menuRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const [show, setShow] = useState<boolean>(false);
   const toggleShow = () => {
     setShow(!show);
@@ -48,7 +48,7 @@ export const HelperPopover = (props: PropsWithChildren<Props>) => {
       </div>
       {menuOptions && menuOptions.length > 0 && (
         <div ref={menuRef} className={classes.menuContainer}>
-          {menuOptions.map(option => {
+          {menuOptions.map((option, index) => {
             return (
               <div
                 className={clsx(
@@ -56,6 +56,7 @@ export const HelperPopover = (props: PropsWithChildren<Props>) => {
                   option.disabled ? classes.disabled : '',
                 )}
                 onClick={option.onClick}
+                key={index.toString()}
               >
                 {option.content}
               </div>

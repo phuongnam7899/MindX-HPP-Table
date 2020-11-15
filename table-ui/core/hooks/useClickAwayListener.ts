@@ -5,8 +5,8 @@ export function useClickAwayListener(
   onClickAway: () => void,
 ): void {
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         onClickAway();
       }
     }

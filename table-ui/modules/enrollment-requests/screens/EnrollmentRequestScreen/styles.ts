@@ -10,10 +10,11 @@ export const useStyles = makeStyles(theme => ({
     minWidth: '150px',
     justifyContent: 'space-between',
     '& .MuiIconButton-root': {
-      display: 'none',
+      display: 'inline-block',
+      visibility: 'hidden',
     },
     'tr:hover & .MuiIconButton-root': {
-      display: 'inline-block',
+      visibility: 'visible',
     },
   },
 }));
