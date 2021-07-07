@@ -12,19 +12,20 @@ export const useStyles = makeStyles(theme => ({
     position: 'absolute',
     display: 'none',
     flexDirection: 'column',
-    padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
     width: 'max-content',
     backgroundColor: '#fff',
     boxShadow: `0 0 8px ${grey[400]}`,
+    borderRadius: '1px',
   },
   menuItem: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: theme.spacing(0.5),
     cursor: 'pointer',
-    '&:hover span': {
-      color: grey[700],
+    '&:hover': {
+      backgroundColor: grey[200],
     },
+    padding: `${theme.spacing(0.25)}px ${theme.spacing(1)}px`,
   },
   disabled: {
     opacity: 0.6,

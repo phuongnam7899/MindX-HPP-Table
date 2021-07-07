@@ -1,48 +1,55 @@
+import { useState } from 'react';
+import { values, orderBy } from 'lodash';
+import dayjs from 'dayjs';
 import {
   Table,
   TableColumnSetting,
   HelperPopover,
   MenuOption,
-} from '../../../../core/components';
-import dayjs from 'dayjs';
+  IconButton,
+} from '@app/core/components';
+import {
+  MoreVertIcon,
+  HighlightOffIcon,
+  CheckCircleIcon,
+} from '@app/core/icons';
+import { green, red } from '@app/core/colors';
+import { SortOrder } from '@app/core/interfaces';
+import {
+  EnrollmentRequest,
+  EnrollmentRequestStatus,
+} from '@app/modules/enrollment-requests/interfaces';
 import { useStyles } from './styles';
-import { useState } from 'react';
-import _ from 'lodash';
-import { SortBy } from '../../../../core/interface';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import { green, red } from '@material-ui/core/colors';
-import { IconButton } from '@material-ui/core';
-import { EnrollmentRequest, EnrollmentRequestStatues } from '../../interface';
 
 const fakeRowData = {
   name: 'Nguyen Van A',
   type: 'ENROLLMENT',
-  status: 'WAITING',
+  status: 'WAITING' as EnrollmentRequestStatus,
   email: 'phuongnam7899@gmail.com',
   course: 'Code for everyone',
   class: 'C4E-24',
   centre: '22C TC',
   phoneNo: '0981038589',
 };
-const fakeRowsData = {};
+
+const fakeRowsData: Record<string, EnrollmentRequest> = {};
+
 for (let i = 1; i < 21; i++) {
   fakeRowsData[`er${i}`] = {
     ...fakeRowData,
     id: `er${i}`,
-    createdAt: dayjs()
-      .add(i, 'day')
-      .toISOString(),
+    createdAt: dayjs().add(i, 'day').toISOString(),
   };
 }
-export const EnrollmentRequestsScreen = props => {
+
+export const EnrollmentRequestsScreen = (): JSX.Element => {
   const classes = useStyles();
 
   const [rowsData, setRowsData] = useState(fakeRowsData);
+
   const updateEnrollmentRequestStatus = (
     recordId: string,
-    newStatus: EnrollmentRequestStatues,
+    newStatus: EnrollmentRequestStatus,
   ) => {
     const oldRecord = { ...rowsData[recordId] };
 
@@ -54,6 +61,7 @@ export const EnrollmentRequestsScreen = props => {
       },
     });
   };
+
   const enrollmantRequestNameMenuOptions = (
     record: EnrollmentRequest,
   ): MenuOption[] => {
@@ -61,7 +69,9 @@ export const EnrollmentRequestsScreen = props => {
       {
         content: (
           <>
-            <CheckCircleIcon style={{ color: green[500] }} />
+            <CheckCircleIcon
+              style={{ color: green[500], marginRight: '0.5rem' }}
+            />
             <span>Approve</span>
           </>
         ),
@@ -73,7 +83,9 @@ export const EnrollmentRequestsScreen = props => {
       {
         content: (
           <>
-            <HighlightOffIcon style={{ color: red[500] }} />
+            <HighlightOffIcon
+              style={{ color: red[500], marginRight: '0.5rem' }}
+            />
             <span>Reject</span>
           </>
         ),
@@ -84,7 +96,8 @@ export const EnrollmentRequestsScreen = props => {
       },
     ];
   };
-  const tableColumnSettings: TableColumnSetting[] = [
+
+  const tableColumnSettings: TableColumnSetting<EnrollmentRequest>[] = [
     {
       field: 'name',
       title: 'Name',
@@ -137,8 +150,9 @@ export const EnrollmentRequestsScreen = props => {
       },
     },
   ];
-  const handleSort = (fieldName: string, sort: SortBy) => {
-    setRowsData(_.orderBy(rowsData, [fieldName], [sort]));
+
+  const handleSort = (fieldName: string, sort: SortOrder) => {
+    setRowsData(orderBy(rowsData, [fieldName], [sort]));
   };
 
   return (
@@ -146,7 +160,7 @@ export const EnrollmentRequestsScreen = props => {
       <h3 className={classes.header}>EnrollmentRequest List</h3>
       <Table
         columnsSettings={tableColumnSettings}
-        rowsData={rowsData}
+        rowsData={values(rowsData)}
         onSort={handleSort}
       />
     </div>

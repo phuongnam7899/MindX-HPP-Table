@@ -1,29 +1,29 @@
+import { map } from 'lodash';
 import { Tooltip } from '../Tooltip';
 import { useStyles } from './styles';
-import { SortBy } from '../../interface';
+import { SortOrder } from '../../interfaces';
 import SortIcon from '@material-ui/icons/Sort';
-import _ from 'lodash';
 import { useState, useEffect } from 'react';
 
-export interface TableColumnSetting {
+export interface TableColumnSetting<T extends object> {
   title: string;
   customTitle?: () => JSX.Element;
   field: string;
   columnTooltipTitle?: string | JSX.Element;
-  customRender?: (record: Object) => JSX.Element;
+  customRender?: (record: T) => JSX.Element;
   sortable?: boolean;
 }
-interface Props {
-  columnsSettings: TableColumnSetting[];
-  rowsData: Record<string, Object>;
-  onSort?: (field: string, sort: SortBy) => void;
+interface Props<T extends object> {
+  columnsSettings: TableColumnSetting<T>[];
+  rowsData: T[];
+  onSort?: (field: string, sort: SortOrder) => void;
 }
 interface SortParam {
   field?: string;
-  sort?: SortBy;
+  sort?: SortOrder;
 }
 
-export const Table = (props: Props) => {
+export const Table = <T extends object>(props: Props<T>) => {
   const { columnsSettings, rowsData, onSort } = props;
   const classes = useStyles();
   const [sortParam, setSortParam] = useState<SortParam>({
@@ -37,14 +37,16 @@ export const Table = (props: Props) => {
       sort: sortParam.sort === 'asc' ? 'desc' : 'asc',
     });
   };
+
   useEffect(() => {
     const { field, sort } = sortParam;
     if (field && sort) onSort(field, sort);
   }, [sortParam]);
+
   return (
     <table className={classes.table}>
       <tr>
-        {columnsSettings.map(column => {
+        {columnsSettings.map((column, index) => {
           const {
             customTitle,
             title,
@@ -54,7 +56,7 @@ export const Table = (props: Props) => {
           } = column;
           const columnContent = customTitle ? customTitle() : title;
           return (
-            <th>
+            <th key={index.toString()}>
               {columnTooltipTitle ? (
                 <Tooltip title={columnTooltipTitle}>
                   {
@@ -84,14 +86,14 @@ export const Table = (props: Props) => {
           );
         })}
       </tr>
-      {_.map(rowsData, rowData => {
+      {map(rowsData, (rowData: T, index: number) => {
         return (
-          <tr>
-            {columnsSettings.map(column => {
+          <tr key={index.toString()}>
+            {columnsSettings.map((column, index) => {
               return column.customRender ? (
-                <td>{column.customRender(rowData)}</td>
+                <td key={index.toString()}>{column.customRender(rowData)}</td>
               ) : (
-                <td>{rowData[column.field]}</td>
+                <td key={index.toString()}>{rowData[column.field]}</td>
               );
             })}
           </tr>

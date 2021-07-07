@@ -1,4 +1,4 @@
-import { EnrollmentRequestsScreen } from '../modules/enrollment-requests/screens/EnrollmentRequestScreen';
+import { EnrollmentRequestsScreen } from '@app/modules/enrollment-requests/screens/EnrollmentRequestScreen';
 
 export default function EnrollmentRequests() {
   return <EnrollmentRequestsScreen />;

@@ -11,10 +11,10 @@ export const Tooltip = (props: PropsWithChildren<Props>): JSX.Element => {
   const contentRef = useRef(null);
   const titleRef = useRef(null);
   const [show, setShow] = useState<boolean>(false);
-  const handleMouseOver = (e: React.MouseEvent) => {
+  const handleMouseOver = () => {
     setShow(true);
   };
-  const handleMouseOut = (e: React.MouseEvent) => {
+  const handleMouseOut = () => {
     setShow(false);
   };
   const titleEl = titleRef.current;
